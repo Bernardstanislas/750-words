@@ -1,7 +1,15 @@
-import { decryptContent, encryptContent, generateKeyPair } from '$lib/crypto';
+import {
+	decryptContent,
+	encryptContent,
+	exportKeyPair,
+	generateKeyPair,
+	importKeyPair
+} from '$lib/crypto';
 import { describe, it, expect } from 'vitest';
 
 describe('The crypto module', () => {
+	const content = 'La barbe de la femme à Georges Moustaki';
+
 	it('generates keypairs', async () => {
 		const keyPair = await generateKeyPair();
 		expect(keyPair.privateKey).toBeDefined();
@@ -9,7 +17,6 @@ describe('The crypto module', () => {
 	});
 
 	it('encrypts content that can be decrypted', async () => {
-		const content = 'La barbe de la femme à Georges Moustaki';
 		const keyPair = await generateKeyPair();
 
 		const encryptedContent = await encryptContent(content, keyPair.publicKey);
@@ -18,6 +25,20 @@ describe('The crypto module', () => {
 
 		const decryptedContent = await decryptContent(encryptedContent, keyPair.privateKey);
 
+		expect(decryptedContent).toBe(content);
+	});
+
+	it('exports and imports keypairs', async () => {
+		const keyPair = await generateKeyPair();
+
+		const exportedKeyPair = await exportKeyPair(keyPair);
+		expect(exportedKeyPair).toBeDefined();
+
+		const importedKeyPair = await importKeyPair(exportedKeyPair);
+		expect(importedKeyPair).toBeDefined();
+
+		const encryptedContent = await encryptContent(content, keyPair.publicKey);
+		const decryptedContent = await decryptContent(encryptedContent, importedKeyPair.privateKey);
 		expect(decryptedContent).toBe(content);
 	});
 });
