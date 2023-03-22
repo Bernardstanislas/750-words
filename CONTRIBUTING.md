@@ -24,7 +24,7 @@ If the user wants to access their data on another device, they can scan a QR cod
 
 The project is still in its early stages. The following features are planned:
 
-- [ ] Save user data in the local storage
+- [x] Save user data in the local storage
 - [ ] Generate a unique key pair for the user, and store it in the local storage
 - [ ] Encrypt user input using the user's key pair
 - [ ] Send the encrypted data to the server
