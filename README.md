@@ -1,22 +1,16 @@
-# create-svelte
+# 750-words
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+750 words is a recreational project developed in order to have a real free mind when practicing free-writting as explained in the book "The Artist's Way" by Julia Cameron or in [this article](https://betterhumans.pub/better-than-meditation-12532d29f6cd).
 
-## Creating a project
+> This project is by no means a commercial copy of the 750 words website. It is a personal project developed to reassure myself that I can write in trusty way whatever I have in mind in an app I know I can trust because I developed it myself.
 
-If you're seeing this, you've probably already done this step. Congrats!
+## Installation
 
 ```bash
-# create a new project in the current directory
-npm create svelte@latest
-
-# create a new project in my-app
-npm create svelte@latest my-app
+npm i
 ```
 
 ## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
 
 ```bash
 npm run dev
@@ -34,5 +28,3 @@ npm run build
 ```
 
 You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
