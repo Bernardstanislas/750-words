@@ -19,6 +19,8 @@ npm run dev
 npm run dev -- --open
 ```
 
+Contributing to the project is very welcome. Please refer to the [contributing guidelines](CONTRIBUTING.md) for more information.
+
 ## Building
 
 To create a production version of your app:
