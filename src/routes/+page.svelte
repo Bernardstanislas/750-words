@@ -1,10 +1,12 @@
 <script lang="ts">
 	import { journal } from '$lib/stores/journal';
+	import KeyPair from '../lib/key-pair.svelte';
 
 	$: encryptedJournal = $journal.length;
 </script>
 
 <h1>750 words</h1>
+<KeyPair />
 <form method="POST">
 	<label>
 		Today's journal
