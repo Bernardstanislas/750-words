@@ -21,7 +21,7 @@
 </script>
 
 {#if localKeyPair}
-	<p>You have a key pair! 🎉</p>
+	<p data-testid="keypair-message">You have a key pair! 🎉</p>
 {:else}
-	<button on:click={generateAndStoreKey}>Give me the key</button>
+	<button data-testid="keypair-button" on:click={generateAndStoreKey}>Give me the key</button>
 {/if}
