@@ -1,6 +1,12 @@
-import crypto from 'crypto';
+let subtle: SubtleCrypto;
 
-const { subtle } = globalThis.crypto || crypto.webcrypto;
+if (globalThis.crypto) {
+	subtle = globalThis.crypto.subtle;
+} else {
+	// eslint-disable-next-line @typescript-eslint/no-var-requires
+	const crypto = require('crypto');
+	subtle = crypto.webcrypto.subtle;
+}
 
 const encryption = {
 	name: 'RSA-OAEP'
@@ -13,7 +19,7 @@ const algorithm = {
 };
 
 export const generateKeyPair = async () => {
-	const keyPair = await crypto.subtle.generateKey(algorithm, true, ['encrypt', 'decrypt']);
+	const keyPair = await subtle.generateKey(algorithm, true, ['encrypt', 'decrypt']);
 	return keyPair;
 };
 
