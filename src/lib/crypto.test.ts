@@ -1,9 +1,9 @@
 import {
 	decryptContent,
 	encryptContent,
-	exportKeyPair,
+	keyPairToString,
 	generateKeyPair,
-	importKeyPair
+	stringToKeyPair
 } from '$lib/crypto';
 import { describe, it, expect } from 'vitest';
 
@@ -31,10 +31,10 @@ describe('The crypto module', () => {
 	it('exports and imports keypairs', async () => {
 		const keyPair = await generateKeyPair();
 
-		const exportedKeyPair = await exportKeyPair(keyPair);
+		const exportedKeyPair = await keyPairToString(keyPair);
 		expect(exportedKeyPair).toBeDefined();
 
-		const importedKeyPair = await importKeyPair(exportedKeyPair);
+		const importedKeyPair = await stringToKeyPair(exportedKeyPair);
 		expect(importedKeyPair).toBeDefined();
 
 		const encryptedContent = await encryptContent(content, keyPair.publicKey);

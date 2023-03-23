@@ -27,13 +27,13 @@ export const decryptContent = async (encryptedContent: ArrayBuffer, privateKey: 
 	return new TextDecoder().decode(decryptedBytes);
 };
 
-export const exportKeyPair = async (keyPair: CryptoKeyPair) => {
+export const keyPairToString = async (keyPair: CryptoKeyPair) => {
 	const publicKey = await subtle.exportKey('jwk', keyPair.publicKey);
 	const privateKey = await subtle.exportKey('jwk', keyPair.privateKey);
 	return JSON.stringify({ publicKey, privateKey });
 };
 
-export const importKeyPair = async (keyPair: string) => {
+export const stringToKeyPair = async (keyPair: string) => {
 	const { publicKey, privateKey } = JSON.parse(keyPair);
 	return <CryptoKeyPair>{
 		publicKey: await subtle.importKey('jwk', publicKey, algorithm, true, ['encrypt']),
