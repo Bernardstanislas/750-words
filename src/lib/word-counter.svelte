@@ -1,8 +1,6 @@
 <script lang="ts">
-	import { getContext } from 'svelte';
-	import { JOURNAL } from '../routes/+layout.svelte';
+	import { journal } from '$lib/stores/journal';
 
-	let journal: SvelteStore<string> = getContext(JOURNAL);
 	$: count = $journal.split(' ').filter((value) => !!value).length;
 </script>
 

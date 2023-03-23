@@ -1,8 +1,6 @@
 <script lang="ts">
-	import { getContext } from 'svelte';
-	import { JOURNAL } from './+layout.svelte';
+	import { journal } from '$lib/stores/journal';
 
-	let journal: SvelteStore<string> = getContext(JOURNAL);
 	$: encryptedJournal = $journal.length;
 </script>
 
