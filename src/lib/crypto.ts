@@ -1,6 +1,7 @@
 import crypto from 'crypto';
 
-const subtle = crypto.subtle;
+const { subtle } = globalThis.crypto || crypto.webcrypto;
+
 const encryption = {
 	name: 'RSA-OAEP'
 };
