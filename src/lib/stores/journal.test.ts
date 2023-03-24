@@ -1,4 +1,4 @@
-import { encryptedJournal, journal } from '$lib/stores/journal';
+import { encryptedJournal, encryptJournalUpdates, journal } from '$lib/stores/journal';
 import { get } from 'svelte/store';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
@@ -24,6 +24,7 @@ describe('The encrypted journal store', () => {
 			}
 		}));
 
+		encryptJournalUpdates({} as CryptoKeyPair);
 		journal.set('test');
 		{
 			const encryptedJournalValue = get(encryptedJournal);
