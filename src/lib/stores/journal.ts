@@ -1,4 +1,5 @@
 import { browser } from '$app/environment';
+import debounce from 'lodash/debounce';
 import { writable } from 'svelte/store';
 
 const JOURNAL = 'journal';
@@ -21,11 +22,13 @@ type EncryptedJournal = {
 
 export const encryptedJournal = writable({ encrypting: false, value: null } as EncryptedJournal);
 
-journal.subscribe((value) => {
-	if (value !== '') {
-		encryptedJournal.set({ encrypting: true, value: null });
-		setTimeout(() => {
-			encryptedJournal.set({ encrypting: false, value });
-		}, 1000);
-	}
-});
+journal.subscribe(
+	debounce((value) => {
+		if (value !== '') {
+			encryptedJournal.set({ encrypting: true, value: null });
+			setTimeout(() => {
+				encryptedJournal.set({ encrypting: false, value });
+			}, 1000);
+		}
+	}, DEBOUNCE_DELAY)
+);

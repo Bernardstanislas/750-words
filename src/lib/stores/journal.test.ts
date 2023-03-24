@@ -16,15 +16,28 @@ describe('The encrypted journal store', () => {
 	});
 
 	it('starts encrypting after the journal changes', () => {
+		vi.mock('lodash/debounce', () => ({
+			default: (f: (...args: unknown[]) => unknown) => (args: unknown) => {
+				setTimeout(() => {
+					f(args);
+				}, 100);
+			}
+		}));
+
 		journal.set('test');
 		{
-			const value = get(encryptedJournal);
-			expect(value).toEqual({ encrypting: true, value: null });
+			const encryptedJournalValue = get(encryptedJournal);
+			expect(encryptedJournalValue).toEqual({ encrypting: false, value: null });
 		}
 		vi.advanceTimersToNextTimer();
 		{
-			const value = get(encryptedJournal);
-			expect(value).toEqual({ encrypting: false, value: 'test' });
+			const encryptedJournalValue = get(encryptedJournal);
+			expect(encryptedJournalValue).toEqual({ encrypting: true, value: null });
+		}
+		vi.advanceTimersToNextTimer();
+		{
+			const encryptedJournalValue = get(encryptedJournal);
+			expect(encryptedJournalValue).toEqual({ encrypting: false, value: 'test' });
 		}
 	});
 });
