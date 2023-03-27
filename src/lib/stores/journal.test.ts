@@ -1,4 +1,5 @@
 import { encryptedJournal, encryptJournalUpdates, journal } from '$lib/stores/journal';
+import { tick } from 'svelte';
 import { get } from 'svelte/store';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
@@ -15,12 +16,14 @@ describe('The encrypted journal store', () => {
 		expect(initialValue).toEqual({ encrypting: false, value: null });
 	});
 
-	it('starts encrypting after the journal changes', () => {
-		vi.mock('lodash/debounce', () => ({
-			default: (f: (...args: unknown[]) => unknown) => (args: unknown) => {
-				setTimeout(() => {
-					f(args);
-				}, 100);
+	it('starts encrypting after the journal changes', async () => {
+		vi.mock('$lib/crypto', () => ({
+			encryptContent: async (value: string) => {
+				return new Promise((resolve) => {
+					setTimeout(() => {
+						resolve(value);
+					}, 100);
+				});
 			}
 		}));
 
@@ -32,11 +35,14 @@ describe('The encrypted journal store', () => {
 		}
 		vi.advanceTimersToNextTimer();
 		{
+			await tick();
 			const encryptedJournalValue = get(encryptedJournal);
 			expect(encryptedJournalValue).toEqual({ encrypting: true, value: null });
 		}
 		vi.advanceTimersToNextTimer();
 		{
+			await tick();
+			await tick();
 			const encryptedJournalValue = get(encryptedJournal);
 			expect(encryptedJournalValue).toEqual({ encrypting: false, value: 'test' });
 		}
