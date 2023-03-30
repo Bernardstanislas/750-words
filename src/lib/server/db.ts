@@ -11,7 +11,7 @@ const getTestClient = (): Client => {
 		},
 		get: async () => {
 			if (!storedContent) {
-				throw new Error('No content stored');
+				return '';
 			}
 			return storedContent;
 		}
@@ -37,7 +37,10 @@ const getProductionClient = (): Client => {
 	};
 };
 
-const client: Client = import.meta.env.MODE === 'test' ? getTestClient() : getProductionClient();
+const client: Client =
+	import.meta.env.MODE === 'test' || (process && process.env.MODE === 'test')
+		? getTestClient()
+		: getProductionClient();
 
 export type Client = {
 	store: (content: string) => Promise<void>;
