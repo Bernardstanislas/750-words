@@ -1,19 +1,13 @@
 import type { Actions } from './$types';
-import { MongoClient } from 'mongodb';
-
-const uri = import.meta.env.VITE_MONGODB_URI;
-
-const client = new MongoClient(uri);
+import client from '$lib/server/db';
 
 export const actions = {
 	default: async ({ request }) => {
 		const formData = await request.formData();
-		const database = client.db('750words');
-		const journals = database.collection('journals');
-		await journals.updateOne(
-			{},
-			{ $set: { content: formData.get('encrypted_journal') } },
-			{ upsert: true }
-		);
+		const content = formData.get('encrypted_journal');
+		if (!content) {
+			throw new Error("No 'encrypted_journal' field in form data");
+		}
+		await client.store(content.toString());
 	}
 } satisfies Actions;
