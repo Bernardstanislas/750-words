@@ -1,50 +1,22 @@
-import { encryptedJournal, encryptJournalUpdates, journal } from '$lib/stores/journal';
-import { tick } from 'svelte';
+import { arrayBufferToBase64 } from '$lib/array-buffer';
+import { generateKeyPair, encryptContent } from '$lib/crypto';
+import { initJournalFromEncryptedContent, journal } from '$lib/stores/journal';
 import { get } from 'svelte/store';
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 
-describe('The encrypted journal store', () => {
-	beforeEach(() => {
-		vi.useFakeTimers();
-	});
-	afterEach(() => {
-		vi.restoreAllMocks();
-	});
+describe(
+	'The journal store',
+	() => {
+		it('can be initialized from an encrypted journal', async () => {
+			const keyPair = await generateKeyPair();
+			const content = 'La barbe de la femme à Georges Moustaki';
+			const encryptedContent = await encryptContent(content, keyPair.publicKey);
+			const serializedEncryptedContent = arrayBufferToBase64(encryptedContent);
 
-	it('has a correct inital value', () => {
-		const initialValue = get(encryptedJournal);
-		expect(initialValue).toEqual({ encrypting: false, value: null });
-	});
-
-	it('starts encrypting after the journal changes', async () => {
-		vi.mock('$lib/crypto', () => ({
-			encryptContent: async (value: string) => {
-				return new Promise((resolve) => {
-					setTimeout(() => {
-						resolve(value);
-					}, 100);
-				});
-			}
-		}));
-
-		encryptJournalUpdates({} as CryptoKeyPair);
-		journal.set('test');
-		{
-			const encryptedJournalValue = get(encryptedJournal);
-			expect(encryptedJournalValue).toEqual({ encrypting: false, value: null });
-		}
-		vi.advanceTimersToNextTimer();
-		{
-			await tick();
-			const encryptedJournalValue = get(encryptedJournal);
-			expect(encryptedJournalValue).toEqual({ encrypting: true, value: null });
-		}
-		vi.advanceTimersToNextTimer();
-		{
-			await tick();
-			await tick();
-			const encryptedJournalValue = get(encryptedJournal);
-			expect(encryptedJournalValue).toEqual({ encrypting: false, value: 'test' });
-		}
-	});
-});
+			await initJournalFromEncryptedContent(serializedEncryptedContent, keyPair.privateKey);
+			const currentValue = get(journal);
+			expect(currentValue).toBe(content);
+		});
+	},
+	{ timeout: 10000 } // generating keypairs might take a while on entropy-low servers
+);

@@ -1,4 +1,5 @@
 import type { Actions } from './$types';
+import type { PageServerLoad } from './$types';
 import client from '$lib/server/db';
 
 export const actions = {
@@ -11,3 +12,10 @@ export const actions = {
 		await client.store(content.toString());
 	}
 } satisfies Actions;
+
+export const load = (async () => {
+	const encryptedJournal = await client.get();
+	return {
+		encryptedJournal
+	};
+}) satisfies PageServerLoad;

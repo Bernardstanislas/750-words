@@ -1,19 +1,10 @@
-import { browser } from '$app/environment';
-import { encryptContent } from '$lib/crypto';
+import { base64ToArrayBuffer } from '$lib/array-buffer';
+import { decryptContent, encryptContent } from '$lib/crypto';
 import keyPair from '$lib/stores/key-pair';
 import debounce from 'lodash/debounce';
 import { writable, type Unsubscriber } from 'svelte/store';
 
-const JOURNAL = 'journal';
-
-const storedJournal = browser ? window.localStorage.getItem(JOURNAL) : '';
-
-export const journal = writable(storedJournal || '');
-journal.subscribe((value) => {
-	if (browser) {
-		localStorage.setItem(JOURNAL, value);
-	}
-});
+export const journal = writable('');
 
 export const DEBOUNCE_DELAY = 300;
 
@@ -45,4 +36,13 @@ export const encryptJournalUpdates = (keyPair: CryptoKeyPair) => {
 			}
 		}, DEBOUNCE_DELAY)
 	);
+};
+
+export const initJournalFromEncryptedContent = async (
+	encryptedContent: string,
+	privateKey: CryptoKey
+) => {
+	const encryptedArrayBuffer = base64ToArrayBuffer(encryptedContent);
+	const content = await decryptContent(new Uint8Array(encryptedArrayBuffer), privateKey);
+	journal.set(content);
 };
