@@ -46,3 +46,8 @@ export const stringToKeyPair = async (keyPair: string) => {
 		privateKey: await subtle.importKey('jwk', privateKey, algorithm, true, ['decrypt'])
 	};
 };
+
+export const keyId = async (publicKey: CryptoKey) => {
+	const jwk = await subtle.exportKey('jwk', publicKey);
+	return jwk.n?.substring(0, 10);
+};

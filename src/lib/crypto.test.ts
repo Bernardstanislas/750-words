@@ -3,7 +3,8 @@ import {
 	encryptContent,
 	keyPairToString,
 	generateKeyPair,
-	stringToKeyPair
+	stringToKeyPair,
+	keyId
 } from '$lib/crypto';
 import { describe, it, expect } from 'vitest';
 
@@ -42,6 +43,16 @@ describe(
 			const encryptedContent = await encryptContent(content, keyPair.publicKey);
 			const decryptedContent = await decryptContent(encryptedContent, importedKeyPair.privateKey);
 			expect(decryptedContent).toBe(content);
+		});
+
+		it('provides a unique public key id', async () => {
+			const keyPair1 = await generateKeyPair();
+			const keyPair2 = await generateKeyPair();
+
+			const key1 = await keyId(keyPair1.publicKey);
+			const key2 = await keyId(keyPair2.publicKey);
+
+			expect(key1).not.toEqual(key2);
 		});
 	},
 	{ timeout: 10000 } // generating keypairs might take a while on entropy-low servers
