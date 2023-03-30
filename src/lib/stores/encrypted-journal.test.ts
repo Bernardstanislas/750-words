@@ -14,7 +14,7 @@ describe('The encrypted journal store', () => {
 
 	it('has a correct inital value', () => {
 		const initialValue = get(encryptedJournal);
-		expect(initialValue).toEqual({ encrypting: false, value: null });
+		expect(initialValue).toEqual({ encrypting: false, value: null, dirty: false });
 	});
 
 	it('starts encrypting after the journal changes', async () => {
@@ -30,22 +30,23 @@ describe('The encrypted journal store', () => {
 
 		encryptJournalUpdates({} as CryptoKeyPair);
 		journal.set('test');
+		await tick();
 		{
 			const encryptedJournalValue = get(encryptedJournal);
-			expect(encryptedJournalValue).toEqual({ encrypting: false, value: null });
+			expect(encryptedJournalValue).toEqual({ encrypting: false, value: null, dirty: true });
 		}
 		vi.advanceTimersToNextTimer();
 		{
 			await tick();
 			const encryptedJournalValue = get(encryptedJournal);
-			expect(encryptedJournalValue).toEqual({ encrypting: true, value: null });
+			expect(encryptedJournalValue).toEqual({ encrypting: true, value: null, dirty: true });
 		}
 		vi.advanceTimersToNextTimer();
 		{
 			await tick();
 			await tick();
 			const encryptedJournalValue = get(encryptedJournal);
-			expect(encryptedJournalValue).toEqual({ encrypting: false, value: 'test' });
+			expect(encryptedJournalValue).toEqual({ encrypting: false, value: 'test', dirty: false });
 		}
 	});
 });

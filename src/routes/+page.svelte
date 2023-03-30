@@ -24,5 +24,5 @@
 		<textarea data-testid="journal" bind:value={$journal} />
 	</label>
 	<input name="encrypted_journal" hidden value={base64EncodedJournal} />
-	<button type="submit" disabled={$encryptedJournal.encrypting}>Submit</button>
+	<button type="submit" disabled={$encryptedJournal.dirty}>Submit</button>
 </form>

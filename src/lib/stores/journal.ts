@@ -11,9 +11,14 @@ export const DEBOUNCE_DELAY = 300;
 type EncryptedJournal = {
 	encrypting: boolean;
 	value: ArrayBuffer | null;
+	dirty: boolean;
 };
 
-export const encryptedJournal = writable({ encrypting: false, value: null } as EncryptedJournal);
+export const encryptedJournal = writable({
+	encrypting: false,
+	dirty: false,
+	value: null
+} as EncryptedJournal);
 
 let unsubscriber: Unsubscriber;
 
@@ -26,13 +31,21 @@ keyPair.subscribe((value) => {
 	}
 });
 
+journal.subscribe((value) => {
+	if (value !== '') {
+		encryptedJournal.update((state) => {
+			return { ...state, dirty: true };
+		});
+	}
+});
+
 export const encryptJournalUpdates = (keyPair: CryptoKeyPair) => {
 	return journal.subscribe(
 		debounce(async (value) => {
 			if (value !== '') {
-				encryptedJournal.set({ encrypting: true, value: null });
+				encryptedJournal.set({ encrypting: true, value: null, dirty: true });
 				const encryptedContent = await encryptContent(value, keyPair.publicKey);
-				encryptedJournal.set({ encrypting: false, value: encryptedContent });
+				encryptedJournal.set({ encrypting: false, value: encryptedContent, dirty: false });
 			}
 		}, DEBOUNCE_DELAY)
 	);
