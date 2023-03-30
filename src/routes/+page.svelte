@@ -1,12 +1,18 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
-	import { journal, encryptedJournal } from '$lib/stores/journal';
+	import keyPair from '$lib/stores/key-pair';
+	import { arrayBufferToBase64 } from '$lib/array-buffer';
+	import { journal, encryptedJournal, initJournalFromEncryptedContent } from '$lib/stores/journal';
 	import KeyPair from '../lib/key-pair.svelte';
+	import type { PageData } from './$types';
 
+	export let data: PageData;
+
+	$: if ($keyPair) {
+		initJournalFromEncryptedContent(data.encryptedJournal, $keyPair.privateKey);
+	}
 	$: base64EncodedJournal = browser
-		? window.btoa(
-				String.fromCharCode(...new Uint8Array($encryptedJournal.value || new ArrayBuffer(0)))
-		  )
+		? arrayBufferToBase64($encryptedJournal.value || new ArrayBuffer(0))
 		: '';
 </script>
 
@@ -18,5 +24,5 @@
 		<textarea data-testid="journal" bind:value={$journal} />
 	</label>
 	<input name="encrypted_journal" hidden value={base64EncodedJournal} />
-	<button type="submit">Submit</button>
+	<button type="submit" disabled={$encryptedJournal.encrypting}>Submit</button>
 </form>

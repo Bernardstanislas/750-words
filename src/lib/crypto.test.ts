@@ -44,5 +44,5 @@ describe(
 			expect(decryptedContent).toBe(content);
 		});
 	},
-	{ timeout: 10000 }
+	{ timeout: 10000 } // generating keypairs might take a while on entropy-low servers
 );
