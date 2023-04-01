@@ -1,3 +1,5 @@
+import type { Brand } from '$lib/types';
+
 let subtle: SubtleCrypto;
 
 if (globalThis.crypto) {
@@ -47,10 +49,12 @@ export const stringToKeyPair = async (keyPair: string) => {
 	};
 };
 
+export type KeyId = Brand<string, 'KeyId'>;
+
 export const keyId = async (publicKey: CryptoKey) => {
 	const jwk = await subtle.exportKey('jwk', publicKey);
 	if (!jwk.n) {
 		throw new Error('No n in jwk');
 	}
-	return jwk.n.substring(0, 10);
+	return jwk.n.substring(0, 10) as KeyId;
 };
