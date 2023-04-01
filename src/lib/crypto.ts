@@ -49,5 +49,8 @@ export const stringToKeyPair = async (keyPair: string) => {
 
 export const keyId = async (publicKey: CryptoKey) => {
 	const jwk = await subtle.exportKey('jwk', publicKey);
-	return jwk.n?.substring(0, 10);
+	if (!jwk.n) {
+		throw new Error('No n in jwk');
+	}
+	return jwk.n.substring(0, 10);
 };
