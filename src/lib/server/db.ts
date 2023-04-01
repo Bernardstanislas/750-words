@@ -4,14 +4,17 @@ import { MongoClient } from 'mongodb';
 const uri = import.meta.env.VITE_MONGODB_URI;
 
 const getTestClient = (): Client => {
-	const storedContents: Record<KeyId, string> = {};
+	const storedContents: Record<KeyId, Record<string, string>> = {};
 
 	return {
-		store: async (keyId: KeyId, content: string) => {
-			storedContents[keyId] = content;
+		store: async (keyId: KeyId, date: Date, content: string) => {
+			storedContents[keyId] = {
+				...storedContents[keyId],
+				[date.toISOString()]: content
+			};
 		},
-		get: async (keyId: KeyId) => {
-			return storedContents[keyId] || '';
+		get: async (keyId: KeyId, date: Date) => {
+			return (storedContents[keyId] && storedContents[keyId][date.toISOString()]) || '';
 		}
 	};
 };
@@ -22,11 +25,11 @@ const getProductionClient = (): Client => {
 	const journals = database.collection('journals');
 
 	return {
-		store: async (keyId: KeyId, content: string) => {
-			await journals.updateOne({ keyId }, { $set: { content } }, { upsert: true });
+		store: async (keyId: KeyId, date: Date, content: string) => {
+			await journals.updateOne({ keyId, date }, { $set: { content } }, { upsert: true });
 		},
-		get: async (keyId: KeyId) => {
-			const journal = await journals.findOne({ keyId });
+		get: async (keyId: KeyId, date: Date) => {
+			const journal = await journals.findOne({ keyId, date });
 			if (!journal) {
 				throw new Error('No journal found');
 			}
@@ -41,8 +44,8 @@ const client: Client =
 		: getProductionClient();
 
 export type Client = {
-	store: (keyId: KeyId, content: string) => Promise<void>;
-	get: (keyId: KeyId) => Promise<string>;
+	store: (keyId: KeyId, date: Date, content: string) => Promise<void>;
+	get: (keyId: KeyId, date: Date) => Promise<string>;
 };
 
 export default client;
