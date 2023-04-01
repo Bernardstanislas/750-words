@@ -38,6 +38,7 @@
 		"@dicebear/collection": "^6.0.2",
 		"@dicebear/core": "^6.0.2",
 		"lodash": "^4.17.21",
-		"mongodb": "^5.1.0"
+		"mongodb": "^5.1.0",
+		"svelte-kit-cookie-session": "^3.4.1"
 	}
 }

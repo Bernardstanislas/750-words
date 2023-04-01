@@ -2,8 +2,14 @@
 	import { browser } from '$app/environment';
 	import keyPair from '$lib/stores/key-pair';
 	import { arrayBufferToBase64 } from '$lib/array-buffer';
-	import { journal, encryptedJournal } from '$lib/stores/journal';
+	import { journal, encryptedJournal, initJournalFromEncryptedContent } from '$lib/stores/journal';
 	import KeyPair from '../lib/key-pair.svelte';
+	import type { PageData } from './$types';
+
+	export let data: PageData;
+	$: if ($keyPair && data.encryptedJournal) {
+		initJournalFromEncryptedContent(data.encryptedJournal, $keyPair.privateKey);
+	}
 
 	$: base64EncodedJournal = browser
 		? arrayBufferToBase64($encryptedJournal.value || new ArrayBuffer(0))
