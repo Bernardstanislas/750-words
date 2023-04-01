@@ -25,8 +25,12 @@ If the user wants to access their data on another device, they can scan a QR cod
 The project is still in its early stages. The following features are planned:
 
 - [x] Save user data in the local storage
-- [ ] Generate a unique key pair for the user, and store it in the local storage
-- [ ] Encrypt user input using the user's key pair
-- [ ] Send the encrypted data to the server
+- [x] Generate a unique key pair for the user, and store it in the local storage
+- [x] Encrypt user input using the user's key pair
+- [x] Send the encrypted data to the server
+- [x] Fetch the encrypted data from the server
+- [ ] Save the journal day by day
+- [ ] List the past days
+- [ ] Allow the user to edit their entries
 - [ ] Generate a QR code exposing the user's key pair
 - [ ] Allow the user to scan a QR code containing a key pair
