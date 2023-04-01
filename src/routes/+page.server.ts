@@ -14,7 +14,9 @@ export const actions = {
 			throw new Error("No 'encrypted_journal' field in form data");
 		}
 		await locals.session.set({ keyId });
-		await client.store(keyId as KeyId, content.toString());
+		const date = new Date();
+		date.setUTCHours(0, 0, 0, 0);
+		await client.store(keyId as KeyId, date, content.toString());
 	}
 } satisfies Actions;
 
@@ -23,7 +25,9 @@ export const load = async ({ locals }) => {
 	if (!keyId) {
 		return {};
 	}
-	const encryptedJournal = await client.get(keyId);
+	const date = new Date();
+	date.setUTCHours(0, 0, 0, 0);
+	const encryptedJournal = await client.get(keyId, date);
 	return {
 		encryptedJournal
 	};
