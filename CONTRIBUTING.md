@@ -30,7 +30,7 @@ The project is still in its early stages. The following features are planned:
 - [x] Send the encrypted data to the server
 - [x] Fetch the encrypted data from the server
 - [x] Save the journal day by day
-- [ ] List the past days
+- [x] List the past days
 - [ ] Allow the user to edit their entries
 - [ ] Generate a QR code exposing the user's key pair
 - [ ] Allow the user to scan a QR code containing a key pair

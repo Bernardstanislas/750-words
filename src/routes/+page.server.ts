@@ -27,8 +27,23 @@ export const load = async ({ locals }) => {
 	}
 	const date = new Date();
 	date.setUTCHours(0, 0, 0, 0);
-	const encryptedJournal = await client.get(keyId, date);
+	let encryptedJournal = '';
+	let entries: {
+		date: Date;
+		content: string;
+	}[] = [];
+	try {
+		encryptedJournal = await client.get(keyId, date);
+	} catch (e) {
+		console.warn(e);
+	}
+	try {
+		entries = await client.listByKeyId(keyId);
+	} catch (e) {
+		console.warn(e);
+	}
 	return {
-		encryptedJournal
+		encryptedJournal,
+		entries
 	};
 };

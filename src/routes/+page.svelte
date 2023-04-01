@@ -18,6 +18,14 @@
 
 <h1>750 words</h1>
 <KeyPair />
+<p>Archives</p>
+<ul>
+	{#each data.entries || [] as entry}
+		<li>
+			{entry.date.toLocaleString()}
+		</li>
+	{/each}
+</ul>
 <form method="POST">
 	<label>
 		Today's journal

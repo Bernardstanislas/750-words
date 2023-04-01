@@ -42,7 +42,9 @@ const getProductionClient = (): Client => {
 			return journal.content;
 		},
 		listByKeyId: async (keyId) => {
-			return await journals.find<{ date: Date; content: string }>({ keyId }).toArray();
+			return (await journals.find<{ date: Date; content: string }>({ keyId }).toArray()).map(
+				(entry) => ({ date: entry.date, content: entry.content })
+			);
 		}
 	};
 };
