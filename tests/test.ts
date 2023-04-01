@@ -13,7 +13,7 @@ test("app stores journal's content", async ({ page }) => {
 	// Generate a private key
 	await expect(page.getByTestId('keypair-button')).toBeVisible();
 	await page.getByTestId('keypair-button').click();
-	await expect(page.getByTestId('keypair-message')).toBeVisible();
+	await expect(page.locator('img[alt="key avatar"]')).toBeVisible();
 
 	// Fill the journal and save it
 	await page.getByTestId('journal').fill(content);
