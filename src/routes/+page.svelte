@@ -3,7 +3,6 @@
 	import keyPair from '$lib/stores/key-pair';
 	import { arrayBufferToBase64 } from '$lib/array-buffer';
 	import { journal, encryptedJournal, initJournalFromEncryptedContent } from '$lib/stores/journal';
-	import KeyPair from '../lib/key-pair.svelte';
 	import type { PageData } from './$types';
 
 	export let data: PageData;
@@ -16,8 +15,6 @@
 		: '';
 </script>
 
-<h1>750 words</h1>
-<KeyPair />
 <p>Archives</p>
 <ul>
 	{#each data.entries || [] as entry}
