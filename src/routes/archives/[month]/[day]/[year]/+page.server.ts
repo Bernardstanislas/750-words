@@ -1,4 +1,4 @@
-import { getDateFromDayMonthYear } from '$lib/dates';
+import { getDateFromDayMonthYear, getParisDate } from '$lib/dates';
 import client from '$lib/server/db';
 import { error } from '@sveltejs/kit';
 
@@ -14,6 +14,9 @@ export const load = async ({ params, locals }) => {
 		throw error(422, 'Invalid date');
 	}
 	const date = getDateFromDayMonthYear(day, month, year);
+	if (date.getTime() === getParisDate().getTime()) {
+		throw error(422, "You cannot access today's archive");
+	}
 	try {
 		const encryptedArchive = await client.get(keyId, date);
 		return { encryptedArchive };
