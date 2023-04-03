@@ -17,9 +17,16 @@
 
 <p>Archives</p>
 <ul>
-	{#each data.entries || [] as entry}
+	{#each data.archives || [] as archive}
 		<li>
-			{entry.date.toLocaleString()}
+			<a
+				href={'archives/' +
+					archive.getUTCFullYear() +
+					'-' +
+					(archive.getUTCMonth() + 1) +
+					'-' +
+					archive.getUTCDate()}>{archive.toLocaleDateString()}</a
+			>
 		</li>
 	{/each}
 </ul>

@@ -1,6 +1,7 @@
 import type { Actions } from './$types';
 import client from '$lib/server/db';
 import type { KeyId } from '$lib/crypto';
+import { getParisDate } from '$lib/dates';
 
 export const actions = {
 	default: async ({ request, locals }) => {
@@ -14,8 +15,8 @@ export const actions = {
 			throw new Error("No 'encrypted_journal' field in form data");
 		}
 		await locals.session.set({ keyId });
-		const date = new Date();
-		date.setUTCHours(0, 0, 0, 0);
+
+		const date = getParisDate();
 		await client.store(keyId as KeyId, date, content.toString());
 	}
 } satisfies Actions;
@@ -25,8 +26,7 @@ export const load = async ({ locals }) => {
 	if (!keyId) {
 		return {};
 	}
-	const date = new Date();
-	date.setUTCHours(0, 0, 0, 0);
+	const date = getParisDate();
 	let encryptedJournal = '';
 	let entries: {
 		date: Date;
@@ -44,6 +44,6 @@ export const load = async ({ locals }) => {
 	}
 	return {
 		encryptedJournal,
-		entries
+		archives: entries.map(({ date }) => date)
 	};
 };
