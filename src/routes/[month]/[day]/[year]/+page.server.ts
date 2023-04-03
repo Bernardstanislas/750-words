@@ -15,11 +15,11 @@ export const load = async ({ params, locals }) => {
 	}
 	const date = getDateFromDayMonthYear(day, month, year);
 	if (date.getTime() === getParisDate().getTime()) {
-		throw error(422, "You cannot access today's archive");
+		throw error(422, "You cannot access today's journal");
 	}
 	try {
-		const encryptedArchive = await client.get(keyId, date);
-		return { encryptedArchive };
+		const encryptedJournal = await client.get(keyId, date);
+		return { encryptedJournal };
 	} catch (e) {
 		console.warn(e);
 		throw error(404, 'Not found');
