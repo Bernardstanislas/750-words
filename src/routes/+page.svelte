@@ -6,8 +6,8 @@
 	import type { PageData } from './$types';
 
 	export let data: PageData;
-	$: if ($keyPair && data.encryptedJournal) {
-		initJournalFromEncryptedContent(data.encryptedJournal, $keyPair.privateKey);
+	$: if ($keyPair && data.encryptedTodaysJournal) {
+		initJournalFromEncryptedContent(data.encryptedTodaysJournal, $keyPair.privateKey);
 	}
 
 	$: base64EncodedJournal = browser
@@ -17,12 +17,13 @@
 
 <p>Archives</p>
 <ul>
-	{#each data.archives || [] as archive}
+	{#each data.journals || [] as journalDate}
 		<li>
 			<a
-				href={`archives/${
-					archive.getUTCMonth() + 1
-				}/${archive.getUTCDate()}/${archive.getUTCFullYear()}`}>{archive.toLocaleDateString()}</a
+				href={`${
+					journalDate.getUTCMonth() + 1
+				}/${journalDate.getUTCDate()}/${journalDate.getUTCFullYear()}`}
+				>{journalDate.toLocaleDateString()}</a
 			>
 		</li>
 	{/each}

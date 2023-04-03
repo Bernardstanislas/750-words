@@ -27,24 +27,24 @@ export const load = async ({ locals }) => {
 		return {};
 	}
 	const date = getParisDate();
-	let encryptedJournal = '';
-	let entries: {
+	let encryptedTodaysJournal = '';
+	let journals: {
 		date: Date;
 		content: string;
 	}[] = [];
 	try {
-		encryptedJournal = await client.get(keyId, date);
+		encryptedTodaysJournal = await client.get(keyId, date);
 	} catch (e) {
 		console.warn(e);
 	}
 	try {
-		entries = await client.listByKeyId(keyId);
+		journals = await client.listByKeyId(keyId);
 	} catch (e) {
 		console.warn(e);
 	}
 	return {
-		encryptedJournal,
-		archives: entries
+		encryptedTodaysJournal,
+		journals: journals
 			.map(({ date }) => date)
 			.filter((date) => date.getTime() !== getParisDate().getTime())
 	};

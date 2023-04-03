@@ -4,9 +4,10 @@
 	import { initJournalFromEncryptedContent, journal } from '$lib/stores/journal';
 
 	export let data: PageData;
-	$: if ($keyPair && data.encryptedArchive) {
-		initJournalFromEncryptedContent(data.encryptedArchive, $keyPair.privateKey);
+	$: if ($keyPair && data.encryptedJournal) {
+		initJournalFromEncryptedContent(data.encryptedJournal, $keyPair.privateKey);
 	}
 </script>
 
 <div>{$journal}</div>
+<a href="/">Back to today's journal</a>
