@@ -44,6 +44,8 @@ export const load = async ({ locals }) => {
 	}
 	return {
 		encryptedJournal,
-		archives: entries.map(({ date }) => date)
+		archives: entries
+			.map(({ date }) => date)
+			.filter((date) => date.getTime() !== getParisDate().getTime())
 	};
 };
