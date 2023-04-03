@@ -7,12 +7,9 @@ export const load = async ({ params, locals }) => {
 	if (!keyId) {
 		throw error(403, 'You must be logged in to access this page');
 	}
-	const dayRegex = /^(\d{4})-(\d{1,2})-(\d{1,2})$/;
-	const match = dayRegex.exec(params.day);
-	if (match === null) {
-		throw error(422, 'Invalid date');
-	}
-	const [year, month, day] = [match[1], match[2], match[3]].map(Number);
+	const month = Number(params.month);
+	const day = Number(params.day);
+	const year = Number(params.year);
 	if (month > 12 || day > 31 || month < 1 || day < 1) {
 		throw error(422, 'Invalid date');
 	}
