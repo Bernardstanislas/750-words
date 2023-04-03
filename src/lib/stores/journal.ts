@@ -43,7 +43,9 @@ export const encryptJournalUpdates = (keyPair: CryptoKeyPair) => {
 	return journal.subscribe(
 		debounce(async (value) => {
 			if (value !== '') {
-				encryptedJournal.set({ encrypting: true, value: null, dirty: true });
+				encryptedJournal.update((state) => {
+					return { ...state, dirty: true, encrypting: true };
+				});
 				const encryptedContent = await encryptContent(value, keyPair.publicKey);
 				encryptedJournal.set({ encrypting: false, value: encryptedContent, dirty: false });
 			}
