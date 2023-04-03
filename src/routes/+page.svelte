@@ -20,12 +20,9 @@
 	{#each data.archives || [] as archive}
 		<li>
 			<a
-				href={'archives/' +
-					archive.getUTCFullYear() +
-					'-' +
-					(archive.getUTCMonth() + 1) +
-					'-' +
-					archive.getUTCDate()}>{archive.toLocaleDateString()}</a
+				href={`archives/${
+					archive.getUTCMonth() + 1
+				}/${archive.getUTCDate()}/${archive.getUTCFullYear()}`}>{archive.toLocaleDateString()}</a
 			>
 		</li>
 	{/each}
