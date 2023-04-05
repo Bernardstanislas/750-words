@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onDestroy, tick } from 'svelte';
+	import { onMount, onDestroy, tick } from 'svelte';
 	import { browser } from '$app/environment';
 	import keyPair from '$lib/stores/key-pair';
 	import { arrayBufferToBase64 } from '$lib/array-buffer';
@@ -35,6 +35,9 @@
 		? arrayBufferToBase64($encryptedJournal.value || new ArrayBuffer(0))
 		: '';
 
+	onMount(() => {
+		$journal = '';
+	});
 	onDestroy(() => {
 		if (unsubscribe) {
 			unsubscribe();
