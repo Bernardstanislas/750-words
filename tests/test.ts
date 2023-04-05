@@ -16,10 +16,19 @@ test("app stores journal's content", async ({ page }) => {
 	await expect(page.locator('img[alt="key avatar"]')).toBeVisible();
 
 	// Fill the journal and save it
-	await page.locator('textarea').fill(content);
-	await expect(page.locator('i')).toHaveText('Saved');
+	const status = page.getByTestId('status');
+	const journal = page.locator('textarea');
+	await expect(status).toHaveText('Saved');
+	await journal.type(content);
+	await expect(status).toHaveText('Not saved');
+	await expect(status).toHaveText('Saved');
 
 	// Check it was actually saved and restored
 	await page.reload();
-	await expect(page.locator('textarea')).toHaveValue(content);
+	await expect(journal).toHaveValue(content);
+
+	// Navigate to yersderday's journal
+	await expect(page.locator('a')).toHaveCount(2);
+	await page.locator('a').last().click();
+	await expect(page.getByTestId('journal')).toHaveText(content);
 });
