@@ -12,6 +12,18 @@ const getTestClient = (): Client => {
 				...storedContents[keyId],
 				[date.toISOString()]: content
 			};
+
+			if (process.env.DUPLICATE_DB_ENTRIES === 'true') {
+				const dayBefore = new Date(date);
+				dayBefore.setDate(dayBefore.getDate() - 1);
+				const dayEvenBefore = new Date(date);
+				dayEvenBefore.setDate(dayEvenBefore.getDate() - 2);
+				storedContents[keyId] = {
+					...storedContents[keyId],
+					[dayBefore.toISOString()]: content,
+					[dayEvenBefore.toISOString()]: content
+				};
+			}
 		},
 		get: async (keyId: KeyId, date: Date) => {
 			return (storedContents[keyId] && storedContents[keyId][date.toISOString()]) || '';
@@ -50,9 +62,7 @@ const getProductionClient = (): Client => {
 };
 
 const client: Client =
-	import.meta.env.MODE === 'test' || (process && process.env.MODE === 'test')
-		? getTestClient()
-		: getProductionClient();
+	process && process.env.MODE === 'test' ? getTestClient() : getProductionClient();
 
 export type Client = {
 	store: (keyId: KeyId, date: Date, content: string) => Promise<void>;
