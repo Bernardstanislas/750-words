@@ -10,12 +10,19 @@
 	export let data: PageData;
 	let form: HTMLFormElement;
 	let unsubscribe: Unsubscriber;
+	let savingPromise: Promise<unknown> = Promise.resolve();
 
+	const submitForm = async () => {
+		savingPromise = fetch('/', {
+			method: 'POST',
+			body: new FormData(form)
+		});
+	};
 	const subscribeToEncryptedJournalChanges = () => {
 		unsubscribe = encryptedJournal.subscribe(async (value) => {
 			if (value.dirty === false && value.encrypting === false) {
 				await tick();
-				form.submit();
+				await submitForm();
 			}
 		});
 	};
@@ -43,21 +50,30 @@
 				href={`${
 					journalDate.getUTCMonth() + 1
 				}/${journalDate.getUTCDate()}/${journalDate.getUTCFullYear()}`}
-				>{journalDate.toLocaleDateString()}</a
 			>
+				{journalDate.toLocaleDateString()}
+			</a>
 		</li>
 	{/each}
 </ul>
-<form method="POST" bind:this={form}>
+<form bind:this={form}>
 	<label>
 		Today's journal
-		<textarea
-			data-testid="journal"
-			bind:value={$journal}
-			on:input|once={subscribeToEncryptedJournalChanges}
-		/>
+		<textarea bind:value={$journal} on:input|once={subscribeToEncryptedJournalChanges} rows="10" />
 	</label>
 	<input name="key_id" hidden value={$keyPair?.id} />
 	<input name="encrypted_journal" hidden value={base64EncodedJournal} />
-	<button type="submit" disabled={$encryptedJournal.dirty}>Submit</button>
 </form>
+<i data-testid="status">
+	{#await savingPromise}
+		Saving...
+	{:then _}
+		{#if $encryptedJournal.dirty}
+			Not saved
+		{:else}
+			Saved
+		{/if}
+	{:catch error}
+		{error.message}
+	{/await}
+</i>
