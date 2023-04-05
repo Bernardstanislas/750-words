@@ -9,5 +9,5 @@
 	}
 </script>
 
-<div>{$journal}</div>
+<div data-testid="journal">{$journal}</div>
 <a href="/">Back to today's journal</a>
