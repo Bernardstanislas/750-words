@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+    body {
+        @apply bg-gray-200;
+        @apply flex flex-col h-screen;
+    }
+}
