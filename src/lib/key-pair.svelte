@@ -11,7 +11,7 @@
 </script>
 
 {#if $keyPair}
-	<img src={avatar.toString()} alt="key avatar" />
+	<img class="w-12" src={avatar.toString()} alt="key avatar" />
 {:else}
 	<button data-testid="keypair-button" on:click={keyPair.generate}>Signup</button>
 {/if}
