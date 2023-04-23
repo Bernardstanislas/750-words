@@ -7,14 +7,16 @@
 
 <div
 	class={classname(
-		'rounded-lg bg-white px-8 py-6 flex-1',
+		'sm:rounded-2xl sm:drop-shadow-xl bg-white px-8 py-6 flex-1',
 		'font-serif',
-		'mx-2 sm:mx-6 md:mx-16 lg:mx-24 xl:mx-32 2xl:mx-44',
-		'my-2 sm:my-3 md:my-10 lg:my-16 xl:my-20 2xl:my-32'
+		'mx-auto w-full sm:w-4/5 lg:w-[800px]',
+		'my-0 sm:my-3 md:my-10 lg:my-16'
 	)}
 >
-	<h1 class="text-3xl">750 words</h1>
-	<KeyPair />
+	<div class="flex justify-between">
+		<h1 class="text-3xl">750 words</h1>
+		<KeyPair />
+	</div>
 	<slot />
 	<WordCounter />
 </div>
