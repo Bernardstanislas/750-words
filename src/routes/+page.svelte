@@ -6,6 +6,7 @@
 	import { journal, encryptedJournal, initJournalFromEncryptedContent } from '$lib/stores/journal';
 	import type { PageData } from './$types';
 	import type { Unsubscriber } from 'svelte/store';
+	import WordCounter from '$lib/word-counter.svelte';
 
 	export let data: PageData;
 	let form: HTMLFormElement;
@@ -45,25 +46,14 @@
 	});
 </script>
 
-<p>Archives</p>
-<ul>
-	{#each data.journals || [] as journalDate}
-		<li>
-			<a
-				href={`${
-					journalDate.getUTCMonth() + 1
-				}/${journalDate.getUTCDate()}/${journalDate.getUTCFullYear()}`}
-			>
-				{journalDate.toLocaleDateString()}
-			</a>
-		</li>
-	{/each}
-</ul>
+<WordCounter />
 <form bind:this={form}>
-	<label>
-		Today's journal
-		<textarea bind:value={$journal} on:input|once={subscribeToEncryptedJournalChanges} rows="10" />
-	</label>
+	<textarea
+		class="w-full bg-gray-100"
+		bind:value={$journal}
+		on:input|once={subscribeToEncryptedJournalChanges}
+		rows="10"
+	/>
 	<input name="key_id" hidden value={$keyPair?.id} />
 	<input name="encrypted_journal" hidden value={base64EncodedJournal} />
 </form>
