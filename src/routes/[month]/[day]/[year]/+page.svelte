@@ -12,7 +12,7 @@
 	}
 </script>
 
-<div class="pt-2" data-testid="journal">
+<div class="pt-2">
   <h2 class="text-xl">
     {date.toLocaleDateString(undefined, {
       weekday: 'long',
