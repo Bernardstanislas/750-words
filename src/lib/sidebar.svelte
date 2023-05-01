@@ -4,8 +4,8 @@
   export let lastWeek: {date: Date, hasArchive: boolean}[] = [];
 </script>
 
-<div class="flex items-center pb-4">
+<a class="flex items-center pb-4" href="/">
 	<Profile />
 	<h1 class="font-bold ml-4 text-3xl">750 words</h1>
-</div>
+</a>
 <Archives {lastWeek} />
