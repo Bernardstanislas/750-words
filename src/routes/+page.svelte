@@ -8,6 +8,7 @@
 	import type { Unsubscriber } from 'svelte/store';
 	import WordCounter from '$lib/word-counter.svelte';
 	import Status from '$lib/status.svelte';
+	import Journal from '$lib/journal.svelte';
 
 	export let data: PageData;
 	let form: HTMLFormElement;
@@ -52,13 +53,7 @@
   <Status savingPromise={savingPromise} dirty={$encryptedJournal.dirty} />
 </div>
 <form bind:this={form}>
-	<textarea
-    autofocus
-		class="w-full px-4 py-3 border border-gray-100"
-		bind:value={$journal}
-		on:input|once={subscribeToEncryptedJournalChanges}
-		rows="20"
-	/>
+  <Journal onChange={subscribeToEncryptedJournalChanges} />
 	<input name="key_id" hidden value={$keyPair?.id} />
 	<input name="encrypted_journal" hidden value={base64EncodedJournal} />
 </form>
