@@ -7,6 +7,7 @@
 	import type { PageData } from './$types';
 	import type { Unsubscriber } from 'svelte/store';
 	import WordCounter from '$lib/word-counter.svelte';
+	import Status from '$lib/status.svelte';
 
 	export let data: PageData;
 	let form: HTMLFormElement;
@@ -46,27 +47,18 @@
 	});
 </script>
 
-<WordCounter />
+<div class="py-2 flex justify-between">
+  <WordCounter />
+  <Status savingPromise={savingPromise} dirty={$encryptedJournal.dirty} />
+</div>
 <form bind:this={form}>
 	<textarea
-		class="w-full bg-gray-100"
+    autofocus
+		class="w-full px-4 py-3 border border-gray-100"
 		bind:value={$journal}
 		on:input|once={subscribeToEncryptedJournalChanges}
-		rows="10"
+		rows="20"
 	/>
 	<input name="key_id" hidden value={$keyPair?.id} />
 	<input name="encrypted_journal" hidden value={base64EncodedJournal} />
 </form>
-<i data-testid="status">
-	{#await savingPromise}
-		Saving...
-	{:then _}
-		{#if $encryptedJournal.dirty}
-			Not saved
-		{:else}
-			Saved
-		{/if}
-	{:catch error}
-		{error.message}
-	{/await}
-</i>

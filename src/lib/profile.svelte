@@ -13,7 +13,9 @@
 </script>
 
 {#if loggedIn}
-	<img class="w-12" src={avatar.toString()} alt="key avatar" />
+	<div class="bg-gray-300 rounded-full overflow-hidden">
+		<img class="w-12" src={avatar.toString()} alt="key avatar" />
+	</div>
 {:else}
 	<button data-testid="keypair-button" on:click={keyPair.generate}>Signup</button>
 {/if}

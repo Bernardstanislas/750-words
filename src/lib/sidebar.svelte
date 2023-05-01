@@ -6,6 +6,6 @@
 
 <div class="flex items-center pb-4">
 	<Profile />
-	<h1 class="font-bold ml-4 mt-2 text-3xl">750 words</h1>
+	<h1 class="font-bold ml-4 text-3xl">750 words</h1>
 </div>
 <Archives {dates} />
