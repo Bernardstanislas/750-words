@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test';
 test('app counts words', async ({ page }) => {
 	await page.goto('/');
 	await page.locator('textarea').fill('Yolo croute lol');
-	await expect(page.getByTestId('words-count')).toHaveText('3 words');
+	await expect(page.getByTestId('words-count')).toHaveText('3/750 words');
 });
 
 test("app stores journal's content", async ({ page }) => {
@@ -28,7 +28,7 @@ test("app stores journal's content", async ({ page }) => {
 	await expect(journal).toHaveValue(content);
 
 	// Navigate to yersderday's journal
-	await expect(page.locator('a')).toHaveCount(2);
-	await page.locator('a').last().click();
+	await expect(page.locator('a.underline')).toHaveCount(2);
+	await page.locator('a.underline').last().click();
 	await expect(page.getByTestId('journal')).toHaveText(content);
 });
