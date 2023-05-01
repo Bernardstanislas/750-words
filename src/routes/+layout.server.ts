@@ -6,18 +6,26 @@ export const load = async ({ locals }) => {
 	if (!keyId) {
 		return {};
 	}
-	let journals: {
+	let archives: {
 		date: Date;
 		content: string;
 	}[] = [];
+  const lastWeek: {date: Date, hasArchive: boolean}[] = [];
+  const today = getParisDate();
+
 	try {
-		journals = await client.listByKeyId(keyId);
+		archives = await client.listByKeyId(keyId);
 	} catch (e) {
 		console.warn(e);
 	}
+
+  for (let i = 1; i < 7; i++) {
+    const date = getParisDate();
+    date.setDate(today.getDate() - i);
+    lastWeek.push({date, hasArchive: !!archives.find((archive) => archive.date.getTime() === date.getTime())});
+  }
+
 	return {
-		journals: journals
-			.map(({ date }) => date)
-			.filter((date) => date.getTime() !== getParisDate().getTime())
-	};
+		lastWeek
+  };
 };
